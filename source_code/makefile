@@ -16,12 +16,16 @@ APP = transactions
 all : test build
 
 build : $(APP)
+	mkdir build
+	mv transactions build/transactions
+
 
 %.o : %.cpp
 	$(CC) $(CFLAGS) -c $< -o $@
 
 $(APP) : main.o main_window.o dialog_database.o dialog_research.o controller.o hash_table.a $(TREE).a
 	$(CC) $^ -o $@ $(LFLAGS)
+	rm -rf *.o *.a
 
 hash_table.a : hash_table.o
 	ar rcs $@ $<
@@ -50,6 +54,7 @@ gcov_report : clean
 
 clean : clean_report
 	$(RM) *.a *.o *.out $(APP)
+	$ rm -rf build
 
 clean_report :
 	$(RM) -rf *.gcda *.gcno *.info *.gch report
